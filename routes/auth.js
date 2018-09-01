@@ -17,13 +17,14 @@ router.post('/login', function (req, res, next) {
     })(req, res, next);
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     const newUser = new UserModel({
         email: req.body.email,
         password: req.body.password,
     });
-    await newUser.save();
-    res.sendStatus(200);
+    const user = await newUser.save();
+
+    req.logIn(user, (err) => next(err));
 });
 
 router.use((req, res) => {
