@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Challenge = require('../models/Challenge');
+const Challenge = require('../models/challenge');
 const DaoConfiguration = require('../DaoConfiguration');
 const ExceptionHandler = require('../handlers/ExceptionHandler');
 const {FilterResponse} = require('../handlers/ResponseHandler');
