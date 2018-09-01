@@ -34,17 +34,13 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    const {title, regex_answer, replace_with, test_cases} = req.body;
 
     let challenge = new Challenge({
-        [DaoConfiguration.CHALLENGE.FIELDS.CHALLENGE_TITLE]: 'Fix the whitespace',
-        [DaoConfiguration.CHALLENGE.FIELDS.REGEX_ANSWER]: "[ ]+",
-        [DaoConfiguration.CHALLENGE.FIELDS.REPLACE_WITH]: " ",
-        [DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES]: [
-            'This is already a valid sentence.',
-            'Extra  spaces',
-            'Multiple  extra  spaces',
-            'There  are 1.2 apples',
-        ]
+        [DaoConfiguration.CHALLENGE.FIELDS.CHALLENGE_TITLE]: title,
+        [DaoConfiguration.CHALLENGE.FIELDS.REGEX_ANSWER]: regex_answer,
+        [DaoConfiguration.CHALLENGE.FIELDS.REPLACE_WITH]: replace_with,
+        [DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES]: test_cases
     });
 
     challenge = await challenge.save();

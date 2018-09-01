@@ -1,7 +1,5 @@
 module.exports = {
-    CHALLENGES: {
-        TBL_NAME: 'challenges'
-    },
+    MODEL_NAME: 'challenge',
     FIELDS: {
         CHALLENGE_ID: '_id',
         CHALLENGE_TITLE: 'title',

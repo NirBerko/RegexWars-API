@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const app = express();
+const passport = require('passport');
 
 app.use(cors());
 
@@ -16,20 +17,28 @@ dotenv.load({path: '.env.dev'});
  * Connect to MongoDB.
  */
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
     console.error(err);
     console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
     process.exit();
 });
 
+require('./config/passport');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(passport.initialize());
 
 app.use('/*', (req, res, next) => {
     next();
 });
 
+app.get('/user', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.json({ok: 'test'})
+});
+
+app.use('/auth', require('./routes/auth'));
 app.use('/challenge', require('./routes/challenge'));
 
 app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`));

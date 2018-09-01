@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const DaoConfiguration = require('../DaoConfiguration');
 
-const Challenge = new mongoose.Schema({
+const ChallengeSchema = new mongoose.Schema({
     [DaoConfiguration.CHALLENGE.FIELDS.CHALLENGE_TITLE]: {
         type: String,
         required: true,
@@ -24,4 +24,4 @@ const Challenge = new mongoose.Schema({
     },
 }, {timestamps: true});
 
-module.exports = mongoose.model('challenge', Challenge);
+module.exports = mongoose.model(DaoConfiguration.CHALLENGE.MODEL_NAME, ChallengeSchema);
