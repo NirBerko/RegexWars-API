@@ -2,10 +2,9 @@ const colors = require('colors');
 
 /**
  *
- * @param req
  * @param res
  */
-module.exports = (req, res) => (e) => {
+module.exports = (res) => (e) => {
     console.log(colors.red(e));
     res.sendStatus(409);
 };

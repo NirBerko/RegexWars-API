@@ -1,10 +1,11 @@
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const UserModel = require('../models/user');
 
 const errorsData = require('../data/errors');
+const ExceptionHandler = require('../handlers/ExceptionHandler');
 const {SendConflict} = require('../handlers/ResponseHandler');
 
 router.post('/login', function (req, res, next) {
@@ -40,19 +41,23 @@ router.post('/register', async (req, res, next) => {
         if (user) {
             return SendConflict(res)(errorsData.authentication.accountEmailExists)
         } else {
-            user = new UserModel({
-                email: req.body.email,
-                password: req.body.password,
-            });
-            user.save((err) => {
-                if (err) {
-                    return next(err);
-                }
+            try {
+                user = new UserModel({
+                    email: req.body.email,
+                    password: req.body.password,
+                });
+                user.save((err) => {
+                    if (err) {
+                        return next(err);
+                    }
 
-                // mailer
+                    // mailer
 
-                req.logIn(user, (err) => next(err))
-            });
+                    req.logIn(user, (err) => next(err))
+                });
+            } catch (e) {
+                ExceptionHandler(res)(e);
+            }
         }
     });
 });
