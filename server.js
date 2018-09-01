@@ -34,8 +34,8 @@ app.use('/*', (req, res, next) => {
     next();
 });
 
-app.get('/user', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.json({ok: 'test'})
+app.get('/userDetails', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.json(req.user)
 });
 
 app.use('/auth', require('./routes/auth'));
