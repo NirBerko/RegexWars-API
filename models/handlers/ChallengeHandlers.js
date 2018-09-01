@@ -1,5 +1,5 @@
-const DaoConfiguration = require('../DaoConfiguration');
-const {FilterOutParams} = require('../utils/ResponseHandler');
+const DaoConfiguration = require('../../DaoConfiguration/index');
+const {FilterOutParams} = require('../../handlers/ResponseHandler');
 
 const ChallengeToUI = (challenge) => {
     challenge[DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES] = challenge[DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES].map(testCase => {

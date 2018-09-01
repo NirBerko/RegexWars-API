@@ -5,7 +5,7 @@ const passport = require('passport');
 const UserModel = require('../models/user');
 
 const errorsData = require('../data/errors');
-const {SendConflict} = require('../utils/ResponseHandler');
+const {SendConflict} = require('../handlers/ResponseHandler');
 
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', (err, user, info) => {

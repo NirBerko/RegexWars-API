@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Challenge = require('../models/challenge');
 const DaoConfiguration = require('../DaoConfiguration');
-const ChallengeHandlers = require('../handlers/ChallengeHandlers');
+const ChallengeHandlers = require('../models/handlers/ChallengeHandlers');
 
-const ExceptionHandler = require('../utils/ExceptionHandler');
+const ExceptionHandler = require('../handlers/ExceptionHandler');
 
 router.get('/all', async (req, res) => {
     try {
