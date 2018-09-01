@@ -26,8 +26,8 @@ const cookieExtractor = (req) => {
 
 passport.use(new JwtStrategy({
     secretOrKey: process.env.JWT_SECRET,
-    issuer: 'skillify.io',
-    audience: 'skillify.io',
+    issuer: process.env.issuer,
+    audience: process.env.audience,
     jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor, ExtractJwt.fromAuthHeaderAsBearerToken()])
 }, (jwt_payload, done) => {
     User.findById(jwt_payload.sub, (err, user) => {

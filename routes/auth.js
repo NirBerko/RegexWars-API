@@ -29,8 +29,8 @@ router.post('/register', async (req, res) => {
 router.use((req, res) => {
     const token = jwt.sign({sub: req.user._id}, process.env.JWT_SECRET, {
         expiresIn: '2 days',
-        issuer: 'skillify.io',
-        audience: 'skillify.io'
+        issuer: process.env.issuer,
+        audience: process.env.audience,
     });
 
     res.json({
