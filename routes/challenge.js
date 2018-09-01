@@ -2,32 +2,25 @@ const express = require('express');
 const router = express.Router();
 const Challenge = require('../models/challenge');
 const DaoConfiguration = require('../DaoConfiguration');
-const ExceptionHandler = require('../handlers/ExceptionHandler');
-const {FilterResponse} = require('../handlers/ResponseHandler');
+const ChallengeHandlers = require('../handlers/ChallengeHandlers');
+
+const ExceptionHandler = require('../utils/ExceptionHandler');
+
+router.get('/all', async (req, res) => {
+    try {
+        const challenges = await Challenge.find().lean();
+
+        res.json(challenges.map(challenge => ChallengeHandlers.ChallengeToUI(challenge)))
+    } catch (e) {
+        ExceptionHandler(req, res)(e);
+    }
+});
 
 router.get('/:id', async (req, res) => {
     try {
         const challenge = await Challenge.findById(req.params.id).lean();
 
-        let challengeToUI = challenge;
-        challengeToUI[DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES] = challengeToUI[DaoConfiguration.CHALLENGE.FIELDS.TEST_CASES].map(testCase => {
-            const regexAnswer = new RegExp(challenge[DaoConfiguration.CHALLENGE.FIELDS.REGEX_ANSWER], challenge[DaoConfiguration.CHALLENGE.FIELDS.REGEX_MODE]);
-
-            let regexedTestCase = '';
-
-            if (challenge[DaoConfiguration.CHALLENGE.FIELDS.REPLACE_WITH]) {
-                regexedTestCase = testCase.replace(regexAnswer, challenge[DaoConfiguration.CHALLENGE.FIELDS.REPLACE_WITH]);
-            }
-
-            return {
-                testCase: testCase,
-                regexedTestCase
-            };
-        });
-        challengeToUI = FilterResponse(challengeToUI, ['regex_answer', 'regex_mode', 'replace_with']);
-
-        res.json(challengeToUI);
-
+        res.json(ChallengeHandlers.ChallengeToUI(challenge));
     } catch (e) {
         ExceptionHandler(req, res)(e);
     }

@@ -19,8 +19,8 @@ router.post('/login', function (req, res, next) {
 
 router.post('/register', async (req, res) => {
     const newUser = new UserModel({
-        email: 'nirberko@gmail.com',
-        password: 'm1ub8wx3',
+        email: req.body.email,
+        password: req.body.password,
     });
     await newUser.save();
     res.sendStatus(200);
