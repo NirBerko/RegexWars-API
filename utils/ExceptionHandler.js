@@ -7,6 +7,6 @@ const colors = require('colors');
  */
 module.exports = (req, res) => (e) => {
     console.log(colors.red(e));
-    res.sendStatus(439);
+    res.sendStatus(409);
 };
 

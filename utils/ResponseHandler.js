@@ -5,6 +5,19 @@ const FilterOutParams = (json, filterOut) => {
     return json;
 };
 
+/**
+ *
+ * @param res
+ * @constructor
+ */
+const SendConflict = (res) => ({errorCode, error}) => {
+    return res.status(409).send({
+        errorCode,
+        error
+    })
+};
+
 module.exports = {
-    FilterOutParams
+    FilterOutParams,
+    SendConflict
 };

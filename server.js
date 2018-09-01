@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const app = express();
 const passport = require('passport');
+const expressValidator = require('express-validator');
 
 app.use(cors());
 
@@ -28,6 +29,7 @@ require('./config/passport');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressValidator());
 app.use(passport.initialize());
 
 app.use('/*', (req, res, next) => {

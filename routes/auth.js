@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const UserModel = require('../models/user');
 
+const errorsData = require('../data/errors');
+const {SendConflict} = require('../utils/ResponseHandler');
+
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
@@ -18,13 +21,40 @@ router.post('/login', function (req, res, next) {
 });
 
 router.post('/register', async (req, res, next) => {
-    const newUser = new UserModel({
-        email: req.body.email,
-        password: req.body.password,
-    });
-    const user = await newUser.save();
+    req.assert('email', 'Email is not valid').isEmail();
+    req.assert('password', 'Password cannot be blank').notEmpty();
+    req.sanitize('email').normalizeEmail({gmail_remove_dots: false});
 
-    req.logIn(user, (err) => next(err));
+    const errors = req.validationErrors();
+
+    if (errors) {
+        return res.status(400).send(errors);
+    }
+
+    UserModel.findOne({email: req.body.email}, (err, existingUser) => {
+        let user = existingUser;
+
+        if (err) {
+            return next(err);
+        }
+        if (user) {
+            return SendConflict(res)(errorsData.authentication.accountEmailExists)
+        } else {
+            user = new UserModel({
+                email: req.body.email,
+                password: req.body.password,
+            });
+            user.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+
+                // mailer
+
+                req.logIn(user, (err) => next(err))
+            });
+        }
+    });
 });
 
 router.use((req, res) => {
